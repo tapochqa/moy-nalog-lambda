@@ -16,8 +16,8 @@
 
 
 (defn the-handler
-  [config messages]
-  (->> messages
-    (map :message)
-    (map parse-sum)
-    (map (fn [n] (moy-nalog/add-income config "Услуги музыкального продюсирования" n)))))
+  [config body]
+  
+  (let [amount (parse-double (:amount body))]
+    
+    (moy-nalog/add-income config "Услуги музыкального продюсирования" amount)))

@@ -15,6 +15,10 @@
    java.util.Base64
    ))
 
+(defn request-to-keywords [req]
+  (into {} (for [[_ k v] (re-seq #"([^&=]+)=([^&]+)" req)]
+    [(keyword k) v])))
+
 
 (defn str->bytes
   ^bytes [^String string ^String encoding]
@@ -33,8 +37,7 @@
            httpMethod
            body
            isBase64Encoded
-           headers
-           messages] :as request}]
+           headers] :as request}]
   (let [parsed
         {:remote-addr (get-in requestContext ["identity" "sourceIp"])
          :uri (if (= path "") "/" path)
@@ -44,7 +47,6 @@
            (-> httpMethod name str/lower-case keyword)
            :trigger)
          :headers (update-keys headers str/lower-case)
-         :messages (json/generate-string messages)
          :body (if isBase64Encoded
                  (-> (str "" body)
                      (str->bytes "UTF-8")
@@ -75,15 +77,15 @@
 
 
 (defn handle-request!
-  [{:keys [headers body messages] :as request} config]
+  [{:keys [headers body] :as request} config]
   
-  (let [messages (json/parse-string messages true)]
+  (let [body (request-to-keywords (slurp body))]
   
   {:body
    (json/encode
      (handling/the-handler
        config
-       messages))
+       body))
    
    :headers headers
    

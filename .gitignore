@@ -11,3 +11,6 @@ pom.xml.asc
 .hgignore
 .hg/
 builds
+login
+password
+resources/modulbank-fixture.json

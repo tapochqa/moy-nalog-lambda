@@ -22,12 +22,10 @@
 (comment
   
   
-  (binding [*in* (-> "trigger-request.json"
+  (binding [*in* (-> "modulbank-fixture.json"
                  clojure.java.io/resource
                  clojure.java.io/reader)]
 
     (-main 
-      "............"
-      "..."))
-  
-  )
+      (slurp "login")
+      (slurp "password"))))
