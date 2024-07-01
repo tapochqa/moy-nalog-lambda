@@ -13,4 +13,6 @@ pom.xml.asc
 builds
 login
 password
+token
 resources/modulbank-fixture.json
+.DS_Store

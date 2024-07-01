@@ -64,6 +64,7 @@ deploy-version:
 		--execution-timeout 3s \
 		--environment LOGIN=$(login) \
 		--environment PASSWORD=$(password) \
+		--environment TOKEN=$(token) \
 		--package-bucket-name lmnd \
 		--package-object-name ${NAME}.zip
 

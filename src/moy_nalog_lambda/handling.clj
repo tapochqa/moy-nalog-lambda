@@ -16,8 +16,11 @@
 
 
 (defn the-handler
-  [config body]
+  [config params]
   
-  (let [amount (parse-double (:amount body))]
-    
-    (moy-nalog/add-income config "Услуги музыкального продюсирования" amount)))
+  (when (= (:token params) (:token config))
+        (let [amount (parse-double (:sum params))
+              response (moy-nalog/add-income config "Услуги музыкального продюсирования" amount)
+              uuid (:approvedReceiptUuid response)]
+          
+          (format "https://lknpd.nalog.ru/api/v1/receipt/%s/%s/print" (:login config) uuid))))

@@ -13,13 +13,15 @@
       (lambda/response->)))
 
 (defn -main
-  [login password]
+  [login password token]
   (lambda 
     {:login login
-     :password password}))
+     :password password
+     :token token}))
 
 
 (comment
+  
   
   
   (binding [*in* (-> "modulbank-fixture.json"
@@ -28,4 +30,5 @@
 
     (-main 
       (slurp "login")
-      (slurp "password"))))
+      (slurp "password")
+      (slurp "token"))))

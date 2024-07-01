@@ -17,7 +17,7 @@
 
 (defn request-to-keywords [req]
   (into {} (for [[_ k v] (re-seq #"([^&=]+)=([^&]+)" req)]
-    [(keyword k) v])))
+  [(keyword k) v])))
 
 
 (defn str->bytes
@@ -77,19 +77,21 @@
 
 
 (defn handle-request!
-  [{:keys [headers body] :as request} config]
+  [{:keys [headers query-params body] :as request} config]
   
-  (let [body (request-to-keywords (slurp body))]
+  (let [params (into {} 
+                  (for [[k v] query-params] 
+                    [(keyword k) v]))]
   
-  {:body
-   (json/encode
-     (handling/the-handler
-       config
-       body))
-   
-   :headers headers
-   
-   :status 200}))
+    {:body
+     (json/encode
+       (handling/the-handler
+         config
+         params))
+     
+     :headers headers
+     
+     :status 200}))
 
 
 (defn response->
